@@ -8,9 +8,15 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 
 	try:
-		agentModule = importlib.import_module(args.agent_file.split('.')[0])
-	except:
-		print('Invalid agent module')
+		moduleName = args.agent_file.split('.')[0]
+		agentModule = importlib.import_module(moduleName)
+	except ModuleNotFoundError as e:
+		print(f"Error: Module '{moduleName}' not found. Details: {e}")
+		sys.exit()
+	except Exception as e:
+		print(f"An unexpected error occurred during import: {e}")
+		import traceback
+		traceback.print_exc()
 		sys.exit()
 		
 	agent = agentModule.Agent()
